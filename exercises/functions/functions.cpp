@@ -1,4 +1,3 @@
-
 /* Tasks:
  * 1. Check out Structs.h. It defines two structs that we will work with.
  *    FastToCopy
@@ -22,12 +21,45 @@ void printName(FastToCopy argument) {
     std::cout << argument.name << '\n';
 }
 
+// Pass by copy - will be slow due to copying
+void printNameCopy(SlowToCopy argument) {
+    std::cout << "Pass by copy: " << argument.name << '\n';
+}
+
+// Pass by reference - faster but can modify the original
+void printNameRef(SlowToCopy& argument) {
+    std::cout << "Pass by reference: " << argument.name << '\n';
+    // Uncomment to see that we can modify the original:
+    // argument.name = "other name";
+}
+
+// Pass by const reference - both fast and safe
+void printNameConstRef(SlowToCopy const& argument) {
+    std::cout << "Pass by const reference: " << argument.name << '\n';
+    // This would cause a compilation error:
+    // argument.name = "other name";
+}
+
+// Print first five characters of the name using const reference to avoid copies
+void printFiveCharacters(SlowToCopy const& a) {
+    std::cout << "First five characters: " << a.name.substr(0, 5) << '\n';
+}
+
 int main() {
     FastToCopy fast = {"Fast"};
     printName(fast);
 
     SlowToCopy slow = {"Slow"};
-    // print it here
+    
+    // This will be slow (3 second delay):
+    printNameCopy(slow);
+    
+    // These will be fast:
+    printNameRef(slow);
+    printNameConstRef(slow);
+
+    // Print first five characters
+    printFiveCharacters(slow);
 
     return 0;
 }
