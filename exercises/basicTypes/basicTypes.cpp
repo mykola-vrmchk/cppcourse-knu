@@ -15,13 +15,13 @@
 int main() {
   std::cout << "Using literals of different number types:\n";
   print(5);
-  print(5/2);           //FIXME
+  print(5.0f/2);
   print(100/2ull);
   print(2 + 4ull);
-  print(2.f + 4ull);
-  print(0u - 1u);       // FIXME
-  print(1.0000000001f); // FIXME Why is this number not represented correctly?
-  print(1. + 1.E-18);   // FIXME
+  print(2.0f + 4ull);
+  print(0 - 1);          // Changed from unsigned to signed int to handle negative numbers
+  print(1.0000000001);   // Changed from float to double for better precision
+  print(1.0 + 1.0E-18);  // Changed to use double literals for better precision
 
   std::cout << "\nUsing increment and decrement operators:\n";
   int a = 1;
@@ -36,19 +36,20 @@ int main() {
   std::cout << "\nCompound assignment operators:\n";
   int n = 1;
   print(n *= 2);        // Q: Is there a difference between this and the next line?
-  print(n *= 2.9);
+  print(n *= 2.9);      // A: Yes, the first line is an integer multiplication, while the second line is a floating point multiplication.
   print(n -= 1.1f);
   print(n /= 4);        // Q: Based on the results of these expressions, is there a better type to be used for n?
-
+  print(n /= 4.0f);     // A: Yes, a floating point type would be more appropriate for n.
   std::cout << "\nLogic expressions:\n";
   const bool alwaysTrue = true;
   bool condition1 = false;
   bool condition2 = true;
   print( alwaysTrue && condition1 && condition2 );
   print( alwaysTrue || condition1 && condition2 );  // Q: Why does operator precedence render this expression useless?
+  print( alwaysTrue && condition1 || condition2 );  // A: The || operator has higher precedence than the && operator, so the expression is evaluated as (alwaysTrue && condition1) || condition2.
   print( alwaysTrue && condition1 || condition2 );
   print(condition1 != condition1);                  // Q: What is the difference between this and the following expression?
-  print(condition2 = !condition2);
+  print(condition2 = !condition2);                  // A: The first expression is a comparison of condition1 with itself, while the second expression is a comparison of condition1 with condition2.
   print( alwaysTrue && condition1 && condition2 );
   print( alwaysTrue || condition1 && condition2 );
   print( alwaysTrue && condition1 || condition2 );
@@ -63,11 +64,10 @@ int main() {
 
   std::cout << "\nPlay with characters and strings:\n";
   print("a");                 // Q: Why is this expression two bytes at run time, the next only one?
-  print('a');
+  print('a');                 // A: The first expression is a string literal, which is an array of characters terminated by a null character. The second expression is a character literal.
 
-  char charArray[20];
+  char charArray[20] = {0};  // Initialize array with zeros
   char* charPtr = charArray;
-  charArray[19] = 0; // Make sure that our string is terminated with the null byte
 
   print(charArray);
   print(charArray[0] = 'a');
@@ -75,5 +75,4 @@ int main() {
   print(charArray[1] = 98);
   print(charArray);
   print(charPtr);
-  // FIXME: Ensure that no unexpected garbage is printed above
 }
